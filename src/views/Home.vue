@@ -28,14 +28,14 @@ const getTableData =async () => {
 const getCountData =async () => {
     const data = await proxy.$api.getCountData()
     console.log(data);
-    // countData.value = data.countData
+    countData.value = data
 }
 
 onMounted(()=>{
     getTableData()
     getCountData()
 })
-</script>
+</script >
 
 <template>
     <el-row class="home" :gutter="20">
@@ -65,6 +65,26 @@ onMounted(()=>{
           </el-table-column>
                 </el-table>
             </el-card>
+        </el-col>
+
+        <el-col :span="16" style="margin-top: 20px;">
+            <div class="num" >
+                <el-card 
+                shadow="hover"
+                :body-style="{display:'flex',padding:0}"
+                v-for="item in countData"
+                :key="item.name"
+                >
+                <component 
+                :is="item.icon" class="icons" 
+                :style="{background:item.color}">
+            </component>
+            <div class="detail">
+                    <p class="num">￥{{item.value}}</p>
+                    <p class="txt">￥{{item.name}}</p>
+            </div>
+            </el-card>
+        </div>
         </el-col>
     </el-row>
     </template>
@@ -113,6 +133,7 @@ onMounted(()=>{
     margin-top: 20px;
   }
   .num {
+    
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
