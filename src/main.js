@@ -9,7 +9,8 @@ import { createPinia } from 'pinia'
 // 开发环境下引入 mock 数据
 import "@/api/mock.js"
 import api from "@/api/api.js"
-
+import { reactive } from 'vue'
+import * as echarts from 'echarts'
 
 
 
