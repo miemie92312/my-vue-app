@@ -141,7 +141,7 @@ const getChartData =async () =>{
       
       //容器存在
       if(proxy.$refs['echart']){
-        observer.value.observer(proxy.$refs['echart'])
+        observer.value.observe(proxy.$refs['echart'])
       }
 
 }
@@ -299,7 +299,8 @@ onMounted(()=>{
     }
   }
   .top-echart{
-    height: 280px
+    height: 280px;
+    overflow: hidden;
   }
   .graph {
     margin-top: 20px;
@@ -308,6 +309,7 @@ onMounted(()=>{
     .el-card {
       width: 48%;
       height: 260px;
+      overflow: hidden;
     }
   }
 }

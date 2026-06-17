@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "shushu-internship-tool": {
+      "source": "LiuMengxuan04/shushu-internship-tool",
+      "sourceType": "github",
+      "skillPath": "skills/shushu-internship-tool/SKILL.md",
+      "computedHash": "94d4ab491dc735c016adcfa2b39d4829719c26c6c4b84e73d603ed5682880074"
+    }
+  }
+}

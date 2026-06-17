@@ -1,3 +1,20 @@
+<script setup>
+import {ref,computed} from 'vue'
+import { Menu } from '@element-plus/icons-vue'
+import { useAllDataStore } from '@/stores'
+
+const menuIcon = Menu   
+const getImageUrl = (user2) => {
+    return new URL(`../assets/images/${user2}.png`, import.meta.url).href
+}
+const store = useAllDataStore()
+const handleCollapse = () => {
+    store.state.isCollapse = !store.state.isCollapse
+}
+
+</script>
+
+
 <template>
   <div class="header">
     <div class="left-content">
@@ -27,21 +44,7 @@
   </div>
 </template>
 
-<script setup>
-import {ref,computed} from 'vue'
-import { Menu } from '@element-plus/icons-vue'
-import { useAllDataStore } from '@/stores'
 
-const menuIcon = Menu   
-const getImageUrl = (user2) => {
-    return new URL(`../assets/images/${user2}.png`, import.meta.url).href
-}
-const store = useAllDataStore()
-const handleCollapse = () => {
-    store.state.isCollapse = !store.state.isCollapse
-}
-
-</script>
 
 
 <style lang="less" scoped>

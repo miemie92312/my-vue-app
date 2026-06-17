@@ -1,48 +1,8 @@
-<template>
-  <el-aside width=width/>
-    <el-menu background-color="#545c64"
-        text-color="#fff"
-        :collapse="isCollapse"
-        :collapse-transition="false">
-            <h3 v-show="!isCollapse">商家后台管理</h3>
-            <h3 v-show="isCollapse">后台</h3>
-
-            <el-menu-item 
-            v-for="item in noChildren"
-            :index="item.path"
-            :key="item.path"
-                >
-            <component class="icons" :is="item.icon"></component>
-            <span>{{item.label}}</span>
-            </el-menu-item>
-            <el-sub-menu v-for="item in hasChildren"
-                :index="item.path"
-                :key="item.path"
-                >
-                <template #title>
-                    <component class="icons" :is="item.icon"></component>
-                    <span>{{ item.label }}</span>
-                </template>
-            <el-menu-item-group>
-                <el-menu-item  
-                    v-for="subItem in item.children"
-                    :index="subItem.path"
-                    :key="subItem.path"
-                    >
-                    <component class="icons" :is="subItem.icon"></component>
-                    <span>{{ subItem.label }}</span>
-                </el-menu-item>
-            </el-menu-item-group>
-        </el-sub-menu>
-    
-    </el-menu>
-  </el-aside>
-</template>
-
 <script setup>
     import { isCollapsible } from 'element-plus/es/components/splitter/src/hooks/usePanel.mjs'
     import {ref,computed} from 'vue'
     import { useAllDataStore } from '@/stores'
+    import {useRouter,useRoute} from 'vue-router'
     const list =ref([
       	{
           path: '/home',
@@ -95,10 +55,65 @@
     //width
     const width = computed(() => store.state.isCollapse ? '64px' : '180px')
 
-const clickMenu=(item)=>{
-    router.push(item.path)
-}
+    const clickMenu=(item)=>{
+        router.push(item.path)
+    }
+    const router  = useRouter()
+    const route = useRoute()
+    const activeMenu = computed(()=>route.path)
+    const handleMenu =(item)=>{
+        router.push(item.path)
+        store.selectMenu(item)
+    }
 </script>
+
+
+<template>
+  <el-aside width=width/>
+    <el-menu background-color="#545c64"
+        text-color="#fff"
+        :collapse="isCollapse"
+        :collapse-transition="false"
+        :default-active="activeMenu"
+        >
+            <h3 v-show="!isCollapse">商家后台管理</h3>
+            <h3 v-show="isCollapse">后台</h3>
+
+            <el-menu-item 
+            v-for="item in noChildren"
+            :index="item.path"
+            :key="item.path"
+            @click="handleMenu(item)"
+                >
+            <component class="icons" :is="item.icon"></component>
+            <span>{{item.label}}</span>
+            </el-menu-item>
+            <el-sub-menu v-for="item in hasChildren"
+                :index="item.path"
+                :key="item.path"
+                >
+                <template #title>
+                    <component class="icons" :is="item.icon"></component>
+                    <span>{{ item.label }}</span>
+                </template>
+            <el-menu-item-group>
+                <el-menu-item  
+                    v-for="subItem in item.children"
+                    :index="subItem.path"
+                    :key="subItem.path"
+                    @click="handleMenu()"
+                    >
+                    <component class="icons" :is="subItem.icon"></component>
+                    <span>{{ subItem.label }}</span>
+                </el-menu-item>
+            </el-menu-item-group>
+        </el-sub-menu>
+    
+    </el-menu>
+  </el-aside>
+</template>
+
+
 
 
 <style lang="less" scoped>

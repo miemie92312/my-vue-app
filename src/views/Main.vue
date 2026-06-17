@@ -1,6 +1,7 @@
 <script setup>
 import CommAside from "@/components/CommonAside.vue"
 import CommonHeader from "@/components/CommonHeader.vue";
+import CommonTag from "@/components/CommonTag.vue";
 </script>
 
 <template>
@@ -13,7 +14,9 @@ import CommonHeader from "@/components/CommonHeader.vue";
                 <!-- 自定义头部组件 -->
                 <common-header />
             </el-header>
+           
             <el-main class="right-main">
+                <common-tag />
                 <!-- 路由出口 -->
                 <router-view></router-view>
             </el-main>
