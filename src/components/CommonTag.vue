@@ -31,12 +31,12 @@ const handleClose = (tag,index)=>{
 <template>
     <div class="tags">
         <el-tag 
-            v-for="tag in tags"
+            v-for="(tag, index) in tags"
             :key="tag.name"
             :closable="tag.name !== 'home'"
             :effect="route.name === tag.name ? 'dark' : 'plain'" 
-            @click="handleMenu(tag )"
-            @close="handleClose(tag,index)"
+            @click="handleMenu(tag)"
+            @close="handleClose(tag, index)"
         >
             {{ tag.label }}
         </el-tag>

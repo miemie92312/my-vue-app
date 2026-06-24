@@ -8,6 +8,7 @@ const routes = [
         path:'/',
         name:'main',
         component:()=>import('@/views/Main.vue'),
+        redirect: '/home', //访问根路径时，自动重定向到首页！
         children:[
             {
                 path: 'home',
@@ -24,7 +25,13 @@ const routes = [
                 name: 'mall',
                 component:() => import("@/views/Mall.vue")
             }
+            
         ],
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component:() => import("@/views/Login.vue")
     },
 ]
 

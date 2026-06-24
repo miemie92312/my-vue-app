@@ -60,5 +60,12 @@ export default{
       data: data
     })
   },
+   getMenu(data) {
+    return request({
+      url: '/user/getMenu',
+      method: 'post',
+      data: data
+    })
+  },
 }
 
