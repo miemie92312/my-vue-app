@@ -164,7 +164,7 @@
             </el-form-item>
         </el-form>
     </div>
-    <div class="table">
+    <div class="table" >
         <el-table :data="tableData" style="width: 100%">
             <el-table-column
                 v-for="item in tableLabel"
@@ -173,8 +173,8 @@
                 :prop="item.prop"
                 :label="item.label"
             />
-            <el-table-column fixed="right" label="Operations" min-width="120">
-            <template #default="scope">
+            <el-table-column fixed="right" label="操 作" min-width="120">
+            <template #default="scope" >
                 <el-button  type="primary" size="small" @click="handleEdit(scope.row)">
                     编辑
                 </el-button>
@@ -243,7 +243,7 @@
         </el-form-item>
       </el-row>
       <el-row style="justify-content: flex-end">
-        <el-form-item>
+        <el-form-item >
           <el-button type="primary" @click="handleCancel">取消</el-button>
           <el-button type="primary" @click="onSubmit">确定</el-button>
         </el-form-item>

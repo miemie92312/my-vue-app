@@ -1,9 +1,10 @@
 <script setup>
-    import { isCollapsible } from 'element-plus/es/components/splitter/src/hooks/usePanel.mjs'
+    // 旧写法保留：import { isCollapsible } from 'element-plus/es/components/splitter/src/hooks/usePanel.mjs'
     import {ref,computed} from 'vue'
     import { useAllDataStore } from '@/stores'
     import {useRouter,useRoute} from 'vue-router'
- const list =ref([
+    const store = useAllDataStore()
+    const localList = ref([
       	{
           path: '/home',
           name: 'home',
@@ -47,17 +48,19 @@
             ]
         }
 ])
-    // const list = computed(()=>store.state.menuList)
+    // 旧写法保留：const list = computed(()=>store.state.menuList)
+    // 这里先做一个更稳的兜底：store 里有菜单就用 store，没有就继续用静态菜单
+    const list = computed(() => store.state.menuList.length ? store.state.menuList : localList.value)
     const noChildren = computed(() => list.value.filter(item => !item.children))
     const hasChildren =computed(() => list.value.filter(item => item.children))
-    const store = useAllDataStore()
     const isCollapse = computed(() => store.state.isCollapse)
     //width
     const width = computed(() => store.state.isCollapse ? '64px' : '180px')
 
-    const clickMenu=(item)=>{
-        router.push(item.path)
-    }
+    // 旧写法保留：
+    // const clickMenu=(item)=>{
+    //     router.push(item.path)
+    // }
     const router  = useRouter()
     const route = useRoute()
     const activeMenu = computed(()=>route.path)

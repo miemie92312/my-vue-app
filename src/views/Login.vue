@@ -13,11 +13,14 @@ const store = useAllDataStore()
 const router = useRouter()
 const handleLogin = async()=>{
     const res = await proxy.$api.getMenu(loginForm)
+    
+    console.log("假后台返回的数据：",res)
     //菜单拿到后在那儿显示？
     store.updateMenuList(res.menuList)
     store.state.token = res.token
-    router.push('/home')
+    //必须先修路（动态添加路由），再开车（跳转首页）
     store.addMenu(router)
+    router.push('/home')
 }
 </script>
 
@@ -27,7 +30,7 @@ const handleLogin = async()=>{
 
 <template>
     <div class="body-login">
-        <el-form :modlel="loginForm" class="login-container">
+        <el-form :model="loginForm" class="login-container">
             <h1>欢迎登陆</h1>
             <el-form-item>
                 <el-input type="input" placeholder="请输入账号" v-model="loginForm.username">
@@ -38,7 +41,7 @@ const handleLogin = async()=>{
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary"  >登录</el-button>
+                <el-button type="primary" @click="handleLogin" >登录</el-button>
             </el-form-item>
         </el-form>
     </div>
