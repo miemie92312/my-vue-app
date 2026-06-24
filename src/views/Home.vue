@@ -205,15 +205,22 @@ onMounted(()=>{
             </el-card>
         </div>
         <!-- 折线图 -->
-         <el-card class="top-echart">
-            <div ref="echart" style="height: 280px;"></div>
+         <!-- 旧写法先保留思路：<el-card class="top-echart" :body-style="{ padding: '0px' }"> -->
+         <!-- 这一步继续收紧容器：不只去掉 padding，还让卡片内容区直接隐藏溢出，避免卡片自己出现滚动条 -->
+         <el-card class="top-echart" :body-style="{ padding: '0px', overflow: 'hidden' }">
+            <!-- 旧写法先保留思路：<div ref="echart" style="height: 280px;"></div> -->
+            <div ref="echart" class="chart-box chart-box-top"></div>
          </el-card>
          <div class="graph">
-            <el-card>
-                <div ref="userEchart" style="height: 240px;"></div>
+            <!-- 旧写法先保留思路：<el-card :body-style="{ padding: '0px' }"> -->
+            <el-card :body-style="{ padding: '0px', overflow: 'hidden' }">
+                <!-- 旧写法先保留思路：<div ref="userEchart" style="height: 240px;"></div> -->
+                <div ref="userEchart" class="chart-box chart-box-bottom"></div>
             </el-card>
-            <el-card>
-                <div ref="videoEchart" style="height: 240px;"></div>
+            <!-- 旧写法先保留思路：<el-card :body-style="{ padding: '0px' }"> -->
+            <el-card :body-style="{ padding: '0px', overflow: 'hidden' }">
+                <!-- 旧写法先保留思路：<div ref="videoEchart" style="height: 240px;"></div> -->
+                <div ref="videoEchart" class="chart-box chart-box-bottom"></div>
             </el-card>
          </div>
         </el-col>
@@ -298,8 +305,20 @@ onMounted(()=>{
       }
     }
   }
-  .top-echart{
+  .chart-box {
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .chart-box-top {
     height: 280px;
+  }
+  .chart-box-bottom {
+    height: 240px;
+  }
+  .top-echart{
+    // 旧写法保留：height: 280px;
+    height: auto;
     overflow: hidden;
   }
   .graph {
@@ -308,7 +327,8 @@ onMounted(()=>{
     justify-content: space-between;
     .el-card {
       width: 48%;
-      height: 260px;
+      // 旧写法保留：height: 260px;
+      height: auto;
       overflow: hidden;
     }
   }
