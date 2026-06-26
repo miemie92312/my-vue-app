@@ -100,7 +100,18 @@ export const useAllDataStore = defineStore('allData', () => {
       function updateMenuList(val){
         state.value.menuList = val
       }
-
+     function clean() {
+      state.value.routerList.forEach(removeRoute => {
+        if (removeRoute) removeRoute()
+      })
+      state.value.routerList = []
+      state.value = initState()
+      // 删除本地缓存
+      localStorage.removeItem("store")
+    }
+      
+      
+      
       //需要把所有定义的state，getters，actions返回出去
       return {
         state,
@@ -109,5 +120,6 @@ export const useAllDataStore = defineStore('allData', () => {
         updateMenuList,
         addMenu,
         resetState,
+        clean
       }
 })

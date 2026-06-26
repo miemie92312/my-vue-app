@@ -11,8 +11,16 @@ import "@/api/mock.js"
 import api from "@/api/api.js"
 import { useAllDataStore } from "@/stores"
 // import { useAllDataStore } from './stores/index.js'
-import { refresh } from 'less'
-
+// import { refresh } from 'less'
+import Login from './views/Login.vue'
+function isRoute(to){
+  return router,getRouters().filter(item=>item.path === to.path).lenth > 0
+}
+router.beforeEach((to,from)=>{
+  if(to.path !=='/login' && !store.state.token){
+    return { name:"login" }
+  }
+})
 
 const pinia = createPinia()
 const app = createApp(App)

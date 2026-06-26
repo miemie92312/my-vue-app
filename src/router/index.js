@@ -3,12 +3,13 @@ import { createRouter,createWebHashHistory } from "vue-router";
 
 //制定路由规则
 
+
 const routes = [
     {
         path:'/',
         name:'main',
         component:()=>import('@/views/Main.vue'),
-        redirect: '/home', //访问根路径时，自动重定向到首页！
+        // 旧写法保留：redirect: '/home', //访问根路径时，自动重定向到首页！
         children:[
             // {
             //     path: 'home',
@@ -33,6 +34,11 @@ const routes = [
         name: 'login',
         component:() => import("@/views/Login.vue")
     },
+    {
+      path: '/404',
+      name: '404',
+      component: () => import('@/views/404.vue')
+    }
 ]
 
 const router = createRouter({
