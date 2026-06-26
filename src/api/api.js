@@ -60,12 +60,13 @@ export default{
       data: data
     })
   },
-   getMenu(data) {
+   // 旧写法保留：ggetMenu(params) {
+   getMenu(params) {
     return request({
-      url: '/user/getMenu',
+      url: '/permission/getMenu',
       method: 'post',
-      data: data
+      data: params
     })
-  },
+ }      
 }
 

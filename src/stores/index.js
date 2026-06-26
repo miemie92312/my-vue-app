@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import router from '../router'
+import { watch } from 'vue'
 
 //初始化state数据，这里我们使用一个函数来返回
 function initState(){
@@ -30,6 +31,13 @@ export const useAllDataStore = defineStore('allData', () => {
 	  //computed() 就是 getters
 	  //function() 就是 actions	
       const state=ref(initState())
+
+      watch(state,(newObj)=>{
+        if(!newObj.token) return;
+        localStorage.setItem("store",JSON.stringify(newObj))
+      },
+      {deep:true}
+    )
       function selectMenu(val){ 
       if(val.name ==="home"){
         state.value.currentMenu = null 
@@ -43,13 +51,28 @@ export const useAllDataStore = defineStore('allData', () => {
         let index = state.value.tags.findIndex(item=>item.name === tag.name)
         state.value.tags.splice(index,1)
       }
+      
+      function resetState() {
+         state.value = initState()
+      }
 
-
-      function addMenu(router){
+      function addMenu(router,type){
+        if(type === 'refresh'){
+          if(JSON.parse(localStorage.getItem('store'))){
+            state.value = JSON.parse(localStorage.getItem('store'))
+            //
+            state.value.routerList = []
+          }else{
+            return
+          }
+        }
         const menu = state.value.menuList;
         const module = import.meta.glob('../views/**/*.vue');
+        //定义菜单格式化后的路由数组
         const routeArr = []
+        //格式化菜单
         menu.forEach(item=>{
+          //菜单有children
           if(item.children){
             item.children.forEach(val=>{
               let url = `../views/${val.url}.vue`
@@ -61,14 +84,18 @@ export const useAllDataStore = defineStore('allData', () => {
             item.component = module[url]
             routeArr.push(item)
           }
-            // routeArr.push(...item)
         })
+
+        // 旧写法保留：state.value.routerList = []
+
+        // 先把上一次动态添加的路由删除掉，避免切换用户后旧权限残留
+        state.value.routerList.forEach(removeRoute => removeRoute())
+        state.value.routerList = []
 
         routeArr.forEach(item=>{
           state.value.routerList.push(router.addRoute('main',item))
         })
-      }      
-
+      }
 
       function updateMenuList(val){
         state.value.menuList = val
@@ -80,7 +107,7 @@ export const useAllDataStore = defineStore('allData', () => {
         selectMenu,
         updateTags,
         updateMenuList,
-        // clean,
         addMenu,
+        resetState,
       }
 })

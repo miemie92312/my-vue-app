@@ -151,6 +151,20 @@ export default {
           ]
         }
       }
+    // 旧写法保留思路：这里原来直接进入账号密码错误分支
+    } else if (username === 'xiaoxiao' && password === 'xiaoxiao') {
+      return {
+        code: 200,
+        data: {
+          // 普通用户只给基础菜单权限
+          token: Mock.Random.guid(),
+          message: '登录成功',
+          menuList: [
+            { path: '/home', name: 'home', label: '首页', icon: 'house', url: 'Home' },
+            { path: '/user', name: 'user', label: '用户管理', icon: 'user', url: 'User' }
+          ]
+        }
+      }
     } else {
       // 如果账号密码不对，直接打回票！
       return {

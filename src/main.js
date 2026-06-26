@@ -9,15 +9,22 @@ import { createPinia } from 'pinia'
 // 开发环境下引入 mock 数据
 import "@/api/mock.js"
 import api from "@/api/api.js"
+import { useAllDataStore } from "@/stores"
+// import { useAllDataStore } from './stores/index.js'
+import { refresh } from 'less'
 
 
-
-
+const pinia = createPinia()
 const app = createApp(App)
+
 app.config.globalProperties.$api = api
-app.use(router)
+
+app.use(pinia)
 app.use(ElementPlus)
-app.use(createPinia())
+
+const store = useAllDataStore()
+store.addMenu(router,"refresh")
+app.use(router)
 app.mount('#app')
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

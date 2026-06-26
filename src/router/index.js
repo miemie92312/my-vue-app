@@ -10,21 +10,21 @@ const routes = [
         component:()=>import('@/views/Main.vue'),
         redirect: '/home', //访问根路径时，自动重定向到首页！
         children:[
-            {
-                path: 'home',
-                name: 'home',
-                component:()=>import('@/views/Home.vue'),
-            },
-            {
-                path: 'user',
-                name: 'user',
-                component:() => import("@/views/User.vue")
-            },
-            {
-                path: 'mall',
-                name: 'mall',
-                component:() => import("@/views/Mall.vue")
-            }
+            // {
+            //     path: 'home',
+            //     name: 'home',
+            //     component:()=>import('@/views/Home.vue'),
+            // },
+            // {
+            //     path: 'user',
+            //     name: 'user',
+            //     component:() => import("@/views/User.vue")
+            // },
+            // {
+            //     path: 'mall',
+            //     name: 'mall',
+            //     component:() => import("@/views/Mall.vue")
+            // }
             
         ],
     },

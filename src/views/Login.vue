@@ -14,6 +14,7 @@ const router = useRouter()
 const handleLogin = async()=>{
     const res = await proxy.$api.getMenu(loginForm)
     
+    store.resetState()
     console.log("假后台返回的数据：",res)
     //菜单拿到后在那儿显示？
     store.updateMenuList(res.menuList)
@@ -36,7 +37,7 @@ const handleLogin = async()=>{
                 <el-input type="input" placeholder="请输入账号" v-model="loginForm.username">
 
                 </el-input>
-                <el-input type="input" placeholder="请输入密码" v-model="loginForm.password">
+                <el-input type="password" placeholder="请输入密码" v-model="loginForm.password">
 
                 </el-input>
             </el-form-item>
