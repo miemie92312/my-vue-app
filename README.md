@@ -1,134 +1,101 @@
-# my-vue-app
+# Vue 后台管理系统
 
-基于 **Vue 3 + Vite + Element Plus** 的商业后台管理系统前端项目，采用 Composition API（`<script setup>`）与 Mock.js 假数据驱动，实现首页数据看板与用户管理两大核心模块。
+基于 Vue 3 + Vite + Element Plus 开发的通用后台管理系统前端项目，包含登录鉴权、动态权限菜单、首页数据看板和用户管理 CRUD 等模块。项目使用 Mock.js 提供本地接口数据，便于在无后端服务的情况下完成前端功能开发和演示。
 
----
-
-## 🛠️ 技术栈
+## 技术栈
 
 | 类别 | 技术 |
-|---|---|
-| 核心框架 | Vue 3 (Composition API, `<script setup>`) |
+| --- | --- |
+| 核心框架 | Vue 3, Composition API, `<script setup>` |
 | 构建工具 | Vite 4 |
-| UI 组件库 | Element Plus 2.x |
-| 可视化 | ECharts 5.x |
-| 路由 | Vue Router 4 (Hash 模式) |
+| UI 组件库 | Element Plus |
+| 路由 | Vue Router 4 |
 | 状态管理 | Pinia |
-| HTTP 请求 | Axios (拦截器封装) |
+| 网络请求 | Axios |
+| 数据可视化 | ECharts |
 | Mock 数据 | Mock.js |
-| CSS 预处理 | Less |
+| 样式 | Less |
 
----
+## 核心功能
 
-## 📁 项目结构
+- 登录鉴权：登录接口返回 token 和权限菜单，前端保存登录状态并跳转首页。
+- 动态权限路由：根据接口返回的 `menuList` 动态生成菜单，并通过 `router.addRoute` 注册子路由。
+- 路由守卫：未登录访问业务页面时跳转登录页，未知路由跳转 404 页面。
+- 状态持久化：使用 Pinia 管理 token、菜单、标签页和侧边栏折叠状态，并通过 localStorage 支持刷新恢复。
+- 请求封装：基于 Axios 封装统一请求方法，支持环境 baseURL 切换、Mock/真实接口切换、token 自动携带、响应数据脱壳和错误提示。
+- 数据看板：使用 ECharts 展示品牌销量趋势、用户增长对比和销量占比，并通过 ResizeObserver 适配容器尺寸变化。
+- 用户管理：基于 Element Plus 实现用户列表、搜索、分页、新增、编辑、删除、弹窗表单和表单校验。
 
-```
+## 项目结构
+
+```text
 my-vue-app/
-├── index.html                    # 入口 HTML
-├── vite.config.js                # Vite 配置（别名 @ → /src、Element Plus 按需导入）
-├── package.json
-└── src/
-    ├── main.js                   # 应用入口（挂载 Element Plus、Pinia、Router、全局 $api）
-    ├── App.vue                   # 根组件（#app 容器，overflow: hidden）
-    ├── assets/
-    │   ├── images/               # 静态图片资源
-    │   └── less/
-    │       ├── index.less        # Less 入口（导入 reset）
-    │       └── reset.less        # CSS Reset + html/body 高宽 100% 设置
-    ├── config/
-    │   └── index.js              # 环境配置中心（dev/test/prod 三套 baseApi + mock 开关）
-    ├── router/
-    │   └── index.js              # 路由配置（Main 为父路由，Home/User 为子路由）
-    ├── stores/
-    │   └── index.js              # Pinia Store（侧边栏折叠状态 isCollapse）
-    ├── api/
-    │   ├── api.js                # 接口统一导出（getTableData / getCountData / getChartData / getUserData / deleteUser / addUser / editUser）
-    │   ├── request.js            # Axios 封装（请求/响应拦截器、Mock 智能分流、环境切换）
-    │   ├── mock.js               # Mock.js 拦截注册（正则匹配 API 路径）
-    │   └── mockDate/
-    │       ├── home.js           # 首页 Mock 数据（表格、卡片统计、图表数据）
-    │       └── user.js           # 用户管理 Mock 数据（CRUD + 分页 + 搜索）
-    ├── components/
-    │   ├── CommonAside.vue       # 左侧菜单组件（折叠/展开、多级菜单）
-    │   ├── CommonHeader.vue      # 顶部 Header（折叠按钮、面包屑、用户头像下拉）
-    │   └── CommonTag.vue         # 页签导航组件（横向滚动标签栏）
-    └── views/
-        ├── Main.vue              # 主布局框架（Aside + Header + Tag + router-view）
-        ├── Home.vue              # 首页数据看板（表格、统计卡片、ECharts 图表）
-        └── User.vue              # 用户管理页（CRUD 弹窗表单、分页列表、模糊搜索）
+├─ index.html
+├─ vite.config.js
+├─ package.json
+└─ src/
+   ├─ main.js                  # 应用入口，注册 Pinia、Router、Element Plus 和全局 API
+   ├─ App.vue
+   ├─ api/
+   │  ├─ api.js                # 业务接口统一导出
+   │  ├─ request.js            # Axios 请求封装
+   │  ├─ mock.js               # Mock 接口注册
+   │  └─ mockDate/             # 首页、用户、权限菜单 Mock 数据
+   ├─ assets/                  # 图片与 Less 样式资源
+   ├─ components/
+   │  ├─ CommonAside.vue       # 侧边栏菜单
+   │  ├─ CommonHeader.vue      # 顶部栏
+   │  └─ CommonTag.vue         # 标签页导航
+   ├─ config/
+   │  └─ index.js              # 环境和接口配置
+   ├─ router/
+   │  └─ index.js              # 基础路由配置
+   ├─ stores/
+   │  └─ index.js              # Pinia 状态管理
+   └─ views/
+      ├─ Login.vue             # 登录页
+      ├─ Main.vue              # 后台主布局
+      ├─ Home.vue              # 首页数据看板
+      ├─ User.vue              # 用户管理
+      ├─ Mall.vue
+      └─ 404.vue
 ```
 
----
-
-## 📦 功能模块
-
-### 1. 主布局框架（Main.vue + 三组件）
-
-- **CommonAside**：左侧可折叠菜单，Pinia 驱动折叠状态，支持单级菜单和 `el-sub-menu` 多级分组。
-- **CommonHeader**：顶部栏，含折叠按钮、面包屑导航、用户头像下拉菜单。
-- **CommonTag**：页签导航栏，`flex-wrap: nowrap` + `overflow-x: auto` 实现横向滚动，防止 tag 过多时折行溢出。
-
-### 2. 首页数据看板（Home.vue）
-
-- **左侧（span="8"）**：
-  - 用户信息卡片（Vite 动态图片加载 `new URL(..., import.meta.url).href`）
-  - 品牌销售数据表格（`el-table` + `v-for` 动态列映射）
-- **右侧（span="16"）**：
-  - 6 个统计指标卡片（`<component :is="item.icon">` 动态图标 + `:style` 动态背景色）
-  - **多品牌折线图**：`Object.keys()` 动态提取多品牌销量数据，渲染多条折线
-  - **双柱状图**：新增用户 vs 活跃用户对比
-  - **饼状图**：手机品牌销量占比
-  - `ResizeObserver` 监听容器尺寸变化，自动调用 `echarts.resize()`
-
-### 3. 用户管理（User.vue）
-
-- 列表展示（姓名、年龄、性别、出生日期、地址）
-- **新增 / 编辑**：弹窗表单（`el-dialog` + `el-form`），含表单验证规则
-- **删除**：`ElMessageBox.confirm` 二次确认
-- **搜索**：按姓名模糊筛选
-- **分页**：`el-pagination` 分页器
-
-### 4. API 层架构
-
-```
-View → proxy.$api.xxx() → api.js → request.js → Axios
-                                                  ├── Mock 开启 → mockApi (Mock.js 拦截)
-                                                  └── Mock 关闭 → baseApi (真实后端)
-```
-
-- `config/index.js`：根据 `import.meta.env.MODE` 自动切换 dev/test/prod 环境配置
-- `request.js`：响应拦截器自动解包 `code === 200` 的 `data`，非 200 弹出 `ElMessage.error`
-- `mock.js`：使用正则匹配拦截 API 路径，分发到对应 Mock 模块
-- `api.js`：统一导出所有接口方法，通过 `app.config.globalProperties.$api` 全局注入
-
----
-
-## 🚀 运行
+## 运行方式
 
 ```bash
-# 安装依赖
 npm install
-
-# 开发模式（Mock 数据，无需后端）
 npm run dev
+```
 
-# 构建生产
+构建生产包：
+
+```bash
 npm run build
+```
 
-# 预览构建结果
+预览构建结果：
+
+```bash
 npm run preview
 ```
 
----
+## 测试账号
 
-## ⚠️ 排坑记录
+| 角色 | 账号 | 密码 | 权限 |
+| --- | --- | --- | --- |
+| 管理员 | `admin` | `123456` | 首页、商品管理、用户管理、其他菜单 |
+| 普通用户 | `xiaoxiao` | `xiaoxiao` | 首页、用户管理 |
 
-| # | 问题 | 原因 | 解决 |
-|---|---|---|---|
-| 1 | 模板编译报错 `Element is missing end tag` | `<component:is="...">` 缺少空格，Vue 将其解析为未知标签 | 改为 `<component :is="...">` |
-| 2 | ECharts 报 `ReferenceError: data is not defined` | 解构了 `orderData` 但打印了 `console.log(data)` | 保持变量引用一致，删多余 `echarts.init` |
-| 3 | 柱状图 X 轴全显示 `undefined` | 将 Mock 的 `item.date` 误写为 `item.data` | 改为 `userData.map(item => item.date)` |
-| 4 | Mock 修改后页面不更新 / 报 no data | Vite HMR 无法渗透 MockJS 内存缓存，语法错导致模块崩溃 | `Ctrl+C` 停服 → `npm run dev` 冷启动 |
-| 5 | `proxy.$api.getUserData is not a function` | 方法写在了 `export default {}` 大括号外 | 移入导出对象内，补全 URL 前缀 `/api` |
-| 6 | countData 卡片不显示且样式错乱 | 动态组件标签粘连 + Flex 布局未生效 | 修正 `<component :is>` 语法，补全 `.num` 的 flex-wrap 排版 |
-| 7 | Tag 溢出折行，加 `overflow` 无效 | 仅加 `overflow-x: auto` 但未禁止 flex 换行 | 同时设置 `display: flex; flex-wrap: nowrap; overflow-x: auto; flex-shrink: 0` |
+## 面试讲解主线
+
+1. 用户在登录页提交账号密码。
+2. 前端调用权限接口，Mock 后端返回 token 和 menuList。
+3. Pinia 保存 token、菜单和标签页状态，并同步到 localStorage。
+4. 根据 menuList 通过 `router.addRoute` 动态注册业务路由。
+5. 路由守卫根据 token 判断是否允许访问业务页面。
+6. Axios 请求拦截器统一携带 token，响应拦截器统一处理数据脱壳和错误提示。
+
+## 构建结果
+
+当前项目已通过 `npm run build` 构建验证。

@@ -9,7 +9,7 @@ const routes = [
         path:'/',
         name:'main',
         component:()=>import('@/views/Main.vue'),
-        // 旧写法保留：redirect: '/home', //访问根路径时，自动重定向到首页！
+        redirect: '/home', //访问根路径时，自动重定向到首页！
         children:[
             // {
             //     path: 'home',

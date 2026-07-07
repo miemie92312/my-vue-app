@@ -10,16 +10,21 @@ import { createPinia } from 'pinia'
 import "@/api/mock.js"
 import api from "@/api/api.js"
 import { useAllDataStore } from "@/stores"
-// import { useAllDataStore } from './stores/index.js'
-// import { refresh } from 'less'
-import Login from './views/Login.vue'
+
 function isRoute(to){
-  return router,getRouters().filter(item=>item.path === to.path).lenth > 0
+  return router.getRoutes().filter(item=>item.path === to.path).length > 0
 }
-router.beforeEach((to,from)=>{
-  if(to.path !=='/login' && !store.state.token){
-    return { name:"login" }
-  }
+router.beforeEach((to, from) => {
+     //如果要跳转的不是login,且token不存在(可以通过不存在token判断出用户未登录)
+    if(to.path !== '/login'&&!store.state.token){
+        //跳转到login
+        return { name: 'login' }
+    }
+    //如果路由记录不存在
+    if(!isRoute(to)){
+        //跳转到404界面
+        return {name: "404"}
+    }
 })
 
 const pinia = createPinia()

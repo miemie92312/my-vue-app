@@ -1,54 +1,82 @@
 <script setup>
-import {getCurrentInstance, reactive} from 'vue'
+import { getCurrentInstance, reactive, ref } from 'vue'
 import { useAllDataStore } from '../stores'
 import { useRouter } from 'vue-router'
-
+import { ElMessage } from 'element-plus'
 
 const loginForm = reactive({
-    username:'',
-    password:''
+    username: '',
+    password: ''
 })
-const { proxy } =getCurrentInstance()
+
+const loginRules = reactive({
+    username: [
+        { required: true, message: '请输入账号', trigger: 'blur' }
+    ],
+    password: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { min: 6, message: '密码不能少于 6 位', trigger: 'blur' }
+    ]
+})
+
+const loginFormRef = ref()
+const { proxy } = getCurrentInstance()
 const store = useAllDataStore()
 const router = useRouter()
-const handleLogin = async()=>{
-    const res = await proxy.$api.getMenu(loginForm)
-    
-    store.resetState()
-    console.log("假后台返回的数据：",res)
-    //菜单拿到后在那儿显示？
-    store.updateMenuList(res.menuList)
-    store.state.token = res.token
-    //必须先修路（动态添加路由），再开车（跳转首页）
-    store.addMenu(router)
-    router.push('/home')
+
+const handleLogin = async () => {
+    if (!loginFormRef.value) return
+
+    await loginFormRef.value.validate(async (valid) => {
+        if (!valid) {
+            ElMessage.error('请先填写正确的账号和密码')
+            return
+        }
+
+        const res = await proxy.$api.getMenu(loginForm)
+
+        store.resetState()
+        store.updateMenuList(res.menuList)
+        store.state.token = res.token
+        store.addMenu(router)
+        router.push('/home')
+    })
 }
 </script>
 
-
-
-
-
 <template>
     <div class="body-login">
-        <el-form :model="loginForm" class="login-container">
-            <h1>欢迎登陆</h1>
-            <el-form-item>
-                <el-input type="input" placeholder="请输入账号" v-model="loginForm.username">
-
-                </el-input>
-                <el-input type="password" placeholder="请输入密码" v-model="loginForm.password">
-
-                </el-input>
+        <el-form
+            ref="loginFormRef"
+            :model="loginForm"
+            :rules="loginRules"
+            class="login-container"
+        >
+            <h1>欢迎登录</h1>
+            <el-form-item prop="username">
+                <el-input
+                    v-model.trim="loginForm.username"
+                    type="text"
+                    placeholder="请输入账号"
+                    clearable
+                />
+            </el-form-item>
+            <el-form-item prop="password">
+                <el-input
+                    v-model.trim="loginForm.password"
+                    type="password"
+                    placeholder="请输入密码"
+                    show-password
+                    clearable
+                    @keyup.enter="handleLogin"
+                />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="handleLogin" >登录</el-button>
+                <el-button type="primary" @click="handleLogin">登录</el-button>
             </el-form-item>
         </el-form>
     </div>
 </template>
-
-
 
 <style lang="less" scoped>
     .body-login{
