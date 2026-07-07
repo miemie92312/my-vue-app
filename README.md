@@ -87,15 +87,6 @@ npm run preview
 | 管理员 | `admin` | `123456` | 首页、商品管理、用户管理、其他菜单 |
 | 普通用户 | `xiaoxiao` | `xiaoxiao` | 首页、用户管理 |
 
-## 面试讲解主线
-
-1. 用户在登录页提交账号密码。
-2. 前端调用权限接口，Mock 后端返回 token 和 menuList。
-3. Pinia 保存 token、菜单和标签页状态，并同步到 localStorage。
-4. 根据 menuList 通过 `router.addRoute` 动态注册业务路由。
-5. 路由守卫根据 token 判断是否允许访问业务页面。
-6. Axios 请求拦截器统一携带 token，响应拦截器统一处理数据脱壳和错误提示。
-
 ## 构建结果
 
 当前项目已通过 `npm run build` 构建验证。
